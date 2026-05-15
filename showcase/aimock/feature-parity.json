@@ -675,46 +675,6 @@
     },
     {
       "match": {
-        "userMessage": "plan"
-      },
-      "response": {
-        "content": "Here is my plan:\n1. Research the topic\n2. Outline key points\n3. Draft the content\n4. Review and refine\n5. Finalize"
-      }
-    },
-    {
-      "match": {
-        "userMessage": "steps"
-      },
-      "response": {
-        "content": "Here is my plan:\n1. Research the topic\n2. Outline key points\n3. Draft the content\n4. Review and refine\n5. Finalize"
-      }
-    },
-    {
-      "match": {
-        "userMessage": "mars"
-      },
-      "response": {
-        "content": "Here is my plan:\n1. Research the topic\n2. Outline key points\n3. Draft the content\n4. Review and refine\n5. Finalize"
-      }
-    },
-    {
-      "match": {
-        "userMessage": "dashboard"
-      },
-      "response": {
-        "content": "Working on your request. Step 1: Gathering data... Step 2: Analyzing results... Step 3: Generating report. Done!"
-      }
-    },
-    {
-      "match": {
-        "userMessage": "report"
-      },
-      "response": {
-        "content": "Working on your request. Step 1: Gathering data... Step 2: Analyzing results... Step 3: Generating report. Done!"
-      }
-    },
-    {
-      "match": {
         "userMessage": "summarize"
       },
       "response": {
@@ -848,17 +808,9 @@
       }
     },
     {
-      "_comment": "Generic 'alice' / 'Alice' greeting fixture for the showcase-assistant 'Hi I'm Alice' flow. The Schedule-1:1 pill is fully matched above (with stable toolCallId + hasToolResult gating) so it doesn't fall through here.",
+      "_comment": "Scoped 'Alice' greeting fixture for the showcase-assistant 'Hi I'm Alice' / 'My name is Alice' flow. Anchored on `Hi` so it doesn't substring-match the hitl-in-chat 'Schedule a 1:1 with Alice' pill (or any other prompt that merely mentions Alice).",
       "match": {
-        "userMessage": "alice"
-      },
-      "response": {
-        "content": "Nice to meet you, Alice! I see you're in Tokyo -- wonderful city. How can I help you today? I can check the weather, look up flights, manage your sales pipeline, or help with other tasks."
-      }
-    },
-    {
-      "match": {
-        "userMessage": "Alice"
+        "userMessage": "Hi, my name is Alice"
       },
       "response": {
         "content": "Nice to meet you, Alice! I see you're in Tokyo -- wonderful city. How can I help you today? I can check the weather, look up flights, manage your sales pipeline, or help with other tasks."

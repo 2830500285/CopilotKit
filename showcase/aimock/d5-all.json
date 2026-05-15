@@ -1280,23 +1280,12 @@
       }
     },
     {
-      "_comment": "shared-state-read-write Greet me pill. Gated by systemMessage substring 'tone: casual' (the canonical default tone from INITIAL_PREFERENCES). If the user changes tone in the Preferences panel, the agent's system prompt loses 'tone: casual' and this fixture stops matching — aimock --proxy-only falls through to the real model so the response reflects the actual preferences.",
+      "_comment": "shared-state-read-write Greet me + Plan-a-weekend pills intentionally have no canned fixtures — they fall through to the real model via aimock --proxy-only + --provider-gemini so responses reflect the actual Preferences panel state (name, tone, language, interests). Mirrors langgraph-python which also has no canned fixtures for these pills. The 'remember favorite color' set_notes fixtures below stay because the D5 probe asserts deterministic tool-call behaviour.",
       "match": {
-        "userMessage": "Say hi and introduce yourself",
-        "systemMessage": "tone: casual"
+        "userMessage": "__shared-state-rw-noop-do-not-match__"
       },
       "response": {
-        "content": "Hi — I'm your shared-state co-pilot. Your Preferences panel (name, tone, language, interests) is fed to me on every turn, and I jot notes back into the Agent Scratch Pad via set_notes so the UI re-renders. Try setting your name or asking me to remember something."
-      }
-    },
-    {
-      "_comment": "shared-state-read-write Plan a weekend pill. Same default-state gating as Greet pill.",
-      "match": {
-        "userMessage": "weekend plan based on my interests",
-        "systemMessage": "tone: casual"
-      },
-      "response": {
-        "content": "A weekend tailored to your interests panel: if you haven't picked any yet, try Cooking + Travel for a market-and-day-trip combo, or Tech + Books for a maker session and a long reading afternoon. Add interests in the Preferences panel and re-ask for a more specific plan."
+        "content": ""
       }
     },
     {
@@ -1409,6 +1398,17 @@
       },
       "response": {
         "content": "The weather in Tokyo is currently 22°C with partly cloudy skies and light easterly winds."
+      }
+    },
+    {
+      "_comment": "Voice demo /transcribe endpoint stub. Returns a canned transcription for the mic button so the demo stays functional in aimock-mode. The real-Whisper proxy path 502s because the MediaRecorder Blob arrives without a recognizable MIME extension; until the runtime transcription handler is hardened to stamp `audio/webm` on empty-type Blobs, we keep this canned response so users don't see a 502 error in the chat. The sample-audio button bypasses /transcribe entirely (it types the canned text directly into the composer).",
+      "match": {
+        "endpoint": "transcription"
+      },
+      "response": {
+        "transcription": {
+          "text": "What is the weather in Tokyo?"
+        }
       }
     },
     {
@@ -1796,7 +1796,7 @@
       }
     },
     {
-      "_comment": "readonly-state-agent-context — Who am I pill. Gated by systemMessage substring matching the canonical default 'Atai' name forwarded via useAgentContext. When the user changes the name input to anything else (e.g. 'alem'), the system prompt loses 'Atai', this fixture stops matching, and aimock --proxy-only falls through to the real model so the agent answers with the actual state values.",
+      "_comment": "readonly-state-agent-context — Who am I pill. Gated by systemMessage substring 'Atai' (the canonical default name forwarded via useAgentContext). When the user changes the name input, the agent's _inject_context callback rewrites the system prompt with the new name, this fixture stops matching, and aimock proxies the request to real Gemini (--provider-gemini configured both locally in docker-compose.local.yml and on Railway per RAILWAY.md) so the agent answers with the actual state values.",
       "match": {
         "userMessage": "What do you know about me from my context?",
         "systemMessage": "Atai"
@@ -1806,7 +1806,7 @@
       }
     },
     {
-      "_comment": "readonly-state-agent-context — Suggest next steps pill. Same systemMessage gating as 'Who am I' so non-default state falls through.",
+      "_comment": "readonly-state-agent-context — Suggest next steps pill. Same systemMessage gating as 'Who am I' so non-default state proxies to real Gemini.",
       "match": {
         "userMessage": "Based on my recent activity, what should I try next?",
         "systemMessage": "Atai"
